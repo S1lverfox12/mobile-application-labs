@@ -26,6 +26,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.compose.ui.graphics.Color
+import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
 fun LoginScreen(
@@ -35,7 +36,8 @@ fun LoginScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
-    val currentRoute = navController.currentBackStackEntry?.destination?.route
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold(
         bottomBar = {

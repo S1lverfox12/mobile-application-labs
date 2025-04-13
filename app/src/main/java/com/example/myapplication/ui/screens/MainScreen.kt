@@ -8,10 +8,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-
+import androidx.navigation.compose.currentBackStackEntryAsState
 
 
 @Composable
@@ -21,8 +23,14 @@ fun MainScreen(
 ) {
     val gpus by viewModel.allGPUs.collectAsState(initial = emptyList())
     val cartItems by viewModel.cartItems.collectAsState(initial = emptyList())
+    val cartGpuIds by remember(cartItems) {
+        derivedStateOf {
+            cartItems.map { it.gpuId }.toSet()
+        }
+    }
     val currentUserId by viewModel.currentUserId.collectAsState()
-    val currentRoute = navController.currentBackStackEntry?.destination?.route
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
 
 
@@ -36,8 +44,8 @@ fun MainScreen(
                 .padding(padding)
                 .fillMaxSize()
         ) {
-            items(gpus) { gpu ->
-                val isInCart by viewModel.isInCart(gpu.id).collectAsState(false)
+            items(gpus, key = { it.id }) { gpu ->
+                val isInCart = gpu.id in cartGpuIds
                 val cartItem = cartItems.find { it.gpuId == gpu.id }
                 GPUCard(
                     gpu = gpu,

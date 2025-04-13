@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 
 
 @Composable
@@ -39,7 +40,8 @@ fun ItemScreen(
     val gpu by viewModel.getGPUById(gpuId).collectAsState(initial = GPU.empty())
     val cartItems by viewModel.cartItems.collectAsState(initial = emptyList())
     val currentUserId by viewModel.currentUserId.collectAsState()
-    val currentRoute = navController.currentBackStackEntry?.destination?.route
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
     val isInCart by viewModel.isInCart(gpu.id).collectAsState(false)
     val context = LocalContext.current
     val imageName = if (gpu.imageUrl.isNullOrBlank()) "no_image" else gpu.imageUrl

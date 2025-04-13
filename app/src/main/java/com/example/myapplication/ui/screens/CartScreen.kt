@@ -37,9 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.compose.runtime.getValue
-
-
-
+import androidx.navigation.compose.currentBackStackEntryAsState
 
 
 @Composable
@@ -50,7 +48,8 @@ fun CartScreen(
     val cartItems by viewModel.cartItems.collectAsState(initial = emptyList())
     val gpus by viewModel.allGPUs.collectAsState(initial = emptyList())
     val currentUserId by viewModel.currentUserId.collectAsState()
-    val currentRoute = navController.currentBackStackEntry?.destination?.route
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
     val cartItemsWithGPU = remember(cartItems, gpus) {
         cartItems.map { cartItem ->

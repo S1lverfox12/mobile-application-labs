@@ -51,9 +51,11 @@ fun BottomNavigationBar(
                 },
                 selected = currentRoute == screen.route,
                 onClick = {
-                    navController.navigate(screen.route) {
-                        popUpTo(navController.graph.startDestinationId)
-                        launchSingleTop = true
+                    if (currentRoute != screen.route) {
+                        navController.navigate(screen.route) {
+                            popUpTo(navController.graph.startDestinationId)
+                            launchSingleTop = true
+                        }
                     }
                 },
 //                colors = NavigationBarItemDefaults.colors(

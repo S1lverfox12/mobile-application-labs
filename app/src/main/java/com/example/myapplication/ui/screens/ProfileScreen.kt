@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
+import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
 fun ProfileScreen(
@@ -32,7 +33,8 @@ fun ProfileScreen(
 ) {
     val currentUserId by viewModel.currentUserId.collectAsState()
     val user by viewModel.getUserById(currentUserId ?: 0).collectAsState(initial = User.empty())
-    val currentRoute = navController.currentBackStackEntry?.destination?.route
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold(
         bottomBar = {
