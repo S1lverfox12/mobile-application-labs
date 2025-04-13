@@ -30,7 +30,6 @@ abstract class AppDatabase : RoomDatabase() {
                     DATABASE_NAME
                 )
                     .addCallback(DatabaseCallback(context))
-                    .addMigrations(AppMigrations.MIGRATION_1_2)
                     .build()
                 INSTANCE = instance
                 instance

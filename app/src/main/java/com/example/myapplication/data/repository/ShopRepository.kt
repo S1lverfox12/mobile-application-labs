@@ -45,4 +45,7 @@ class ShopRepository @Inject constructor(
     suspend fun deleteCartItem(cartItem: CartItem) = cartDao.deleteCartItem(cartItem)
     suspend fun clearCart(userId: Int) = cartDao.clearCart(userId)
     fun getCartItemCount(userId: Int): Flow<Int> = cartDao.getCartItemCount(userId)
+    suspend fun getUserByEmail(email: String): User? {
+        return userDao.getUserByEmail(email)
+    }
 }

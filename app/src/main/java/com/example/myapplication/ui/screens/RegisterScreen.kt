@@ -142,6 +142,9 @@ fun RegisterScreen(
                                     popUpTo(navController.graph.startDestinationId)
                                     launchSingleTop = true
                                 }
+                            },
+                            onFailure = { message ->
+                                errorMessage = message
                             }
                         )
                     }

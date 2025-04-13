@@ -70,17 +70,25 @@ class ShopViewModel @Inject constructor(
         }
     }
 
-    fun registerUser(username: String, email: String, password: String, onSuccess: (Int) -> Unit) {
+    fun registerUser(username: String, email: String, password: String, onSuccess: (Int) -> Unit,  onFailure: (String) -> Unit) {
         viewModelScope.launch {
-            val user = User(username = username, email = email, password = password)
-            repository.insertUser(user)
-            val registeredUser = repository.getUser(email, password)
-            registeredUser?.id?.let { userId ->
-                _currentUserId.value = userId
-                sessionManager.saveUserId(userId)
-                onSuccess(userId)
-            }
+            val existingUser = repository.getUserByEmail(email)
+            if (existingUser != null) {
+                onFailure("Пользователь с таким email уже существует")
+                return@launch
+            } else {
 
+
+                val user = User(username = username, email = email, password = password)
+                repository.insertUser(user)
+                val registeredUser = repository.getUser(email, password)
+                registeredUser?.id?.let { userId ->
+                    _currentUserId.value = userId
+                    sessionManager.saveUserId(userId)
+                    onSuccess(userId)
+                }?: onFailure("Не удалось зарегистрировать пользователя")
+
+            }
         }
     }
 
